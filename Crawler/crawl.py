@@ -15,7 +15,6 @@ data = urllib.request.urlopen(req).read()
 soup = BeautifulSoup(data, 'html.parser')
 
 teams = soup.select('#main-container > div > section > div.tab-content > div > div > table > tr > td')
-
 for team in teams:
     attr = team.text
     if attr_value == 0 and attr[-1].isdigit() == False and attr[-1] != '-':
