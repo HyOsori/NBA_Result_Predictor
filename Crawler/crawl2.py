@@ -1,15 +1,8 @@
 import urllib.request
 from bs4 import BeautifulSoup
 from pandas import DataFrame
-import pandas as pd
 
-NBA_result = [[0]*14 for i in range(30)]
-team_value = 0
-attr_value = 0
 nba_teams = "bos bkn cle cha gs chi dal den det hou ind lac lal mem mia mil min no ny okc orl phi phx por sac sa tor utah wsh".split(" ")
-
-dfs = []
-n = 0
 
 for team in nba_teams:
     req = "http://www.espn.com/nba/team/stats/_/name/{}".format(team)
@@ -17,23 +10,33 @@ for team in nba_teams:
     soup = BeautifulSoup(data, 'html.parser')
     players = soup.select(".tablehead > tr")
 
-    dfn = []
+    game_stats = []
+    game_head = []
+    shooting_stats = []
+    shooting_head = []
+    dfn = game_stats
+    head = game_head
 
     for player in players:
         if player['class'][0] == 'stathead':
             continue
 
-        elem = player.find_all('td')
-
-        if player['class'][0] == 'colhead':
-            head = [nm.text for nm in elem]
+        if player['class'][0] == 'total':
+            dfn = shooting_stats
+            head = shooting_head
             continue
 
-        if player['class'][0] == 'total':
-            break
+        elem = player.find_all('td')
+        row = [nm.text for nm in elem]
 
-        dfn.append([nm.text for nm in elem])
+        if player['class'][0] == 'colhead':
+            head += row
+            continue
 
-    df = DataFrame(dfn, columns=head)
-    df.to_csv("..\\Data\\{}_stats.csv".format(team), index=False)
-    dfs.append(df)
+        dfn.append(row)
+
+    df_game = DataFrame(game_stats, columns=game_head)
+    df_shooting = DataFrame(shooting_stats, columns=shooting_head)
+    df_game.to_csv("..\\Data\\teams\\game\\{}_game_stats.csv".format(team), index=False)
+    df_shooting.to_csv("..\\Data\\teams\\shooting\\{}_shooting_stats.csv".format(team), index=False)
+
