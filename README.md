@@ -1,4 +1,5 @@
 # NBA_Result_Predictor
+NBA score prediction system via neural network.
 
 ## License
 
@@ -18,3 +19,11 @@ All learning data files are crawled in 3 sources. [16-17 season only]
 1. Standings : http://www.espn.com/nba/standings
 2. Each team stats : http://www.espn.com/nba/team/stats/_/name/team_name/
 3. Team by team comparison per game statistics : http://www.espn.com/nba/statistics/team/_/stat/team-comparison-per-game
+
+## Contributor
+**Data crawling**  
+[Park Seon Ha](https://github.com/orgs/HyOsori/people/CameliaOvO) : Special Thanks  
+[Yu Jeongmin](https://github.com/machenity)  
+[Jung Jo Hyung](https://github.com/epikjjh)  
+
+**Learning**
