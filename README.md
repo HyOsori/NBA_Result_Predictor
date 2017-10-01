@@ -22,7 +22,7 @@ All learning data files are crawled in 3 sources. [16-17 season only]
 
 ## Contributor
 **Data crawling**  
-[Park Seon Ha](https://github.com/orgs/HyOsori/people/CameliaOvO) : Special Thanks  
+[Park Seon Ha](https://github.com/CameliaOv) : Special Thanks  
 [Yu Jeongmin](https://github.com/machenity)  
 [Jung Jo Hyung](https://github.com/epikjjh)  
 
