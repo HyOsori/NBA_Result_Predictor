@@ -37,6 +37,6 @@ for team in nba_teams:
 
     df_game = DataFrame(game_stats, columns=game_head)
     df_shooting = DataFrame(shooting_stats, columns=shooting_head)
-    df_game.to_csv("..\\Data\\teams\\game\\{}_game_stats.csv".format(team), index=False)
-    df_shooting.to_csv("..\\Data\\teams\\shooting\\{}_shooting_stats.csv".format(team), index=False)
+    df_game.to_csv("..\\Data\\players\\game\\{}_game_stats.csv".format(team), index=False)
+    df_shooting.to_csv("..\\Data\\players\\shooting\\{}_shooting_stats.csv".format(team), index=False)
 
