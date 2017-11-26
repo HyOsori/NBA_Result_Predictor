@@ -1,50 +1,12 @@
 import tensorflow as tf
-import csv
-import pprint
+import pickle
 import numpy as np
 
-team_stats, results = [], []
-
-with open('../Data/teams/team_stats', 'r') as f:
-    rdr = csv.reader(f);
-    for line in rdr:
-        team_stats.append(line)
-
-with open('../Data/results/game_results', 'r') as f:
-    rdr = csv.reader(f);
-    for line in rdr:
-        results.append(line)    
-
-def find_stats_by_team(team_name):
-    for row in team_stats:
-        if row[1] == team_name:
-            return row
-    return []
-
 x_data, y_data = [], []
-
-for game in results:
-    if game == results[0]: continue
-    A = find_stats_by_team(game[0])
-    B = find_stats_by_team(game[2])
-    res = []
-    
-    try:
-        for i in range(2, len(A)):       
-            res.append(float(A[i]) - float(B[i]))
-    except IndexError:
-        print("==IndexError==")
-        print("A:", A)
-        print("B:", B)
-        continue
-    else:
-        x_data.append(res)
-    
-    try:
-        y_data.append(list([(float(game[1]) - float(game[3])) / (float(game[1]) + float(game[3]))]))
-    except ValueError:
-        print("===ValueError==")
-        x_data.pop()
+with open('./processed_data.txt', 'rb') as f:
+	tmp = pickle.load(f)
+	x_data = tmp["x"]
+	y_data = tmp["y"]
         
 tf.set_random_seed(777)
 
@@ -81,7 +43,8 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
 ))
 
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-accuracy = tf.reduce_mean(tf.cast(tf.subtract(y_data, Y), tf.float32))
+error = tf.abs(tf.subtract(y_data, hypothesis))
+accuracy = 1 - tf.reduce_mean(tf.cast(error, tf.float32))
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -91,3 +54,7 @@ with tf.Session() as sess:
         if i % 1000 == 0:
             print(i, sess.run(cost, feed_dict={
                   X: x_data, Y: y_data}), sess.run([W1, W2]))
+
+    h, a = sess.run([hypothesis, accuracy],
+                       feed_dict={X: x_data, Y: y_data})
+    print("\nHypothesis: ", h, "\nCorrect: ", y_data, "\nAccuracy: ", a)
