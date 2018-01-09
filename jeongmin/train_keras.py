@@ -1,3 +1,4 @@
+from keras.callbacks import EarlyStopping
 from keras.models import Sequential
 from keras.layers import Dense
 from keras import initializers, optimizers
@@ -24,6 +25,9 @@ Y_train = Y_train[:1000]
 def custom_accuracy(y_true, y_pred):
     return 1 - K.abs(y_true[0] - y_pred[0])
 
+# Define callback function for earlystopping
+early_stopping = EarlyStopping(patience=10)
+
 # Design the model
 model1 = Sequential() # xavier normal initialization
 model1.add(Dense(11, input_dim=11, kernel_initializer='glorot_normal', bias_initializer=initializers.random_normal(),
@@ -34,7 +38,7 @@ model1.add(Dense(1, kernel_initializer='glorot_normal', bias_initializer=initial
 
 model1.compile(optimizer=optimizers.adam(), loss='mean_absolute_error', metrics=[custom_accuracy])
 
-hist = model1.fit(X_train, Y_train, epochs=500, batch_size=10, validation_data=(X_val, Y_val))
+hist = model1.fit(X_train, Y_train, epochs=500, batch_size=10, validation_data=(X_val, Y_val), callbacks=[early_stopping])
 
 fig, loss_ax = plt.subplots()
 acc_ax = loss_ax.twinx()
