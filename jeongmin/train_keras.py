@@ -1,8 +1,9 @@
 from keras.models import Sequential
 from keras.layers import Dense
 from keras import initializers, optimizers
-import numpy as np
 import keras.backend.tensorflow_backend as K
+import matplotlib.pyplot as plt
+import numpy as np
 import pickle
 
 # Process the datasets
@@ -34,3 +35,21 @@ model1.add(Dense(1, kernel_initializer='glorot_normal', bias_initializer=initial
 model1.compile(optimizer=optimizers.adam(), loss='mean_absolute_error', metrics=[custom_accuracy])
 
 hist = model1.fit(X_train, Y_train, epochs=500, batch_size=10, validation_data=(X_val, Y_val))
+
+fig, loss_ax = plt.subplots()
+acc_ax = loss_ax.twinx()
+
+loss_ax.plot(hist.history['loss'], 'y', label='train loss')
+loss_ax.plot(hist.history['val_loss'], 'r', label='val loss')
+
+acc_ax.plot(hist.history['custom_accuracy'], 'b', label='train acc')
+acc_ax.plot(hist.history['val_custom_accuracy'], 'g', label='val acc')
+
+loss_ax.set_xlabel('epoch')
+loss_ax.set_ylabel('loss')
+acc_ax.set_ylabel('accuracy')
+
+loss_ax.legend(loc='upper left')
+acc_ax.legend(loc='lower left')
+
+plt.show()
